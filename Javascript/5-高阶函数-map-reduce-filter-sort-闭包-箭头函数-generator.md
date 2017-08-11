@@ -7,7 +7,7 @@
 
 ---
 
-## **map**
+## 5-1 **map**
 
 
 - 调用Array的map()方法，传入我们自己的函数，就得到了一个新的Array作为结果.
@@ -23,7 +23,7 @@ arr.map(pow); // [1, 4, 9, 16, 25, 36, 49, 64, 81]
 
 ---
 
-## **reduce**
+## 5-2 **reduce**
 
 - Array的reduce()把一个函数作用在这个Array的[x1, x2, x3...]上，这个函数必须接收两个参数，reduce()把结果继续和序列的下一个元素做累积计算.
 
@@ -49,6 +49,41 @@ string2int('13579') // 13579
 
 ---
 
-## **filter**
+## 5-3 **filter**
+
+- filter()把传入的函数依次作用于每个元素，然后根据返回值是true还是false决定保留还是丢弃该元素
+
+``` javascript 
+var arr = ['A', '', 'B', null, undefined, 'C', '  '];
+var r = arr.filter(function (s) {
+    return s && s.trim(); // 注意：IE9以下的版本没有trim()方法
+});
+r; // ['A', 'B', 'C']
+```
+
+- 回调函数
+
+``` javascript 
+var arr = ['apple', 'strawberry', 'banana', 'pear', 'apple', 'orange', 'orange', 'strawberry'];
+
+arr.filter(function (element, index, self) {
+    return self.indexOf(element) === index;
+}); 
+
+// ['apple','strawberry','banana','pear','orange']
+
+```
+
+---
+
+## 5-4 **sort**
+
+- Array的sort()方法默认把所有元素先转换为String再排序.
+
+- sort()方法会直接对Array进行修改，它返回的结果仍是当前Array
+
+---
+
+## 5-5 **闭包**
 
 
