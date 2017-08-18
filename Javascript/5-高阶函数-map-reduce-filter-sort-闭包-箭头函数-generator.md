@@ -123,6 +123,7 @@ var name = "The Window";
 　　alert(object.getNameFunc()()); // My Object
 
 ```
+---
 
 ## 5-6 **箭头函数（Arrow Function，ES6新增）**
 
@@ -146,6 +147,8 @@ var name = "The Window";
 
 ```
 - 箭头函数内部的this是词法作用域，由上下文确定。
+
+---
 
 ## 5-7 **生成器（generator，ES6新增）**
 
