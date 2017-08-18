@@ -84,6 +84,68 @@ arr.filter(function (element, index, self) {
 
 ---
 
-## 5-5 **闭包**
+## 5-5 **闭包（closure）**
 
+- 概念：定义在一个函数内部的函数；能够读取函数内部变量的函数。
+
+- 用途：读取函数内部的变量；让这些变量的值始终保持在内存中。
+
+- 使用注意：
+
+    - 闭包会使得函数中的变量都被保存在内存中，造成网页性能问题，解决办法是退出函数之前，将不使用的局部变量全部删除；
+
+    -  闭包会在父函数外部改变父函数内部变量的值，所以，如果把父函数当做对象使用，闭包当做它的公用方法，内部变量当做私有属性，一定小心不要随便改变父函数内部变量的值。
+
+
+``` javascript
+
+　　var name = "The Window";
+　　var object = {
+　　　　name : "My Object",
+　　　　getNameFunc : function(){
+　　　　　　return function(){
+　　　　　　　　return this.name;
+　　　　　　};
+　　　　}
+　　};
+　　alert(object.getNameFunc()()); //The Window
+
+var name = "The Window";
+　　var object = {
+　　　　name : "My Object",
+　　　　getNameFunc : function(){
+　　　　　　var that = this;
+　　　　　　return function(){
+　　　　　　　　return that.name;
+　　　　　　};
+　　　　}
+　　};
+　　alert(object.getNameFunc()()); // My Object
+
+```
+
+## 5-6 **箭头函数（Arrow Function，ES6新增）**
+
+- 例如 ：x => x*x
+
+``` javascript
+// 两个参数:
+(x, y) => x * x + y * y
+
+// 无参数:
+() => 3.14
+
+// 可变参数:
+(x, y, ...rest) => {
+    var i, sum = x + y;
+    for (i=0; i<rest.length; i++) {
+        sum += rest[i];
+    }
+    return sum;
+}
+
+```
+- 箭头函数内部的this是词法作用域，由上下文确定。
+
+## 5-7 **生成器（generator，ES6新增）**
 
