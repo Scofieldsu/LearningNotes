@@ -19,7 +19,7 @@ services:
 
 - 运行： docker-compose up -d
 
-##　关于rancher
+## 关于rancher
 
 - Rancher是一个开放源码的软件平台，可以让组织在生产中运行和管理Docker和Kubernetes。使用Rancher，组织不再需要使用不同的开源技术从头开始构建容器服务平台。Rancher提供管理生产中的容器所需的整个软件堆栈。
 
