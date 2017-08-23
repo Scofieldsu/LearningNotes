@@ -102,12 +102,145 @@ var ps = q1.querySelectorAll('div.highlighted > p');
 
 - 一种是修改innerHTML属性，这个方式非常强大，不但可以修改一个DOM节点的文本内容，还可以直接通过HTML片段修改DOM节点内部的子树
 
+```javascript
+// 获取<p id="p-id">...</p>
+var p = document.getElementById('p-id');
+// 设置文本为abc:
+p.innerHTML = 'ABC'; // <p id="p-id">ABC</p>
+// 设置HTML:
+p.innerHTML = 'ABC <span style="color:red">RED</span> XYZ';
+// <p>...</p>的内部结构已修改
+```
+
 - 第二种是修改innerText或textContent属性，这样可以自动对字符串进行HTML编码，保证无法设置任何HTML标签。（两者的区别在于读取属性时，innerText不返回隐藏元素的文本，而textContent返回所有文本。另外注意IE<9不支持textContent）
 
-- **修改css**：DOM节点的style属性对应所有的CSS，可以直接获取或设置。因为CSS允许font-size这样的名称，但它并非JavaScript有效的属性名，所以需要在JavaScript中改写为驼峰式命名fontSize
+``` javascript
+// 获取<p id="p-id">...</p>
+var p = document.getElementById('p-id');
+// 设置文本:
+p.innerText = '<script>alert("Hi")</script>';
+// HTML被自动编码，无法设置一个<script>节点:
+// <p id="p-id">&lt;script&gt;alert("Hi")&lt;/script&gt;</p>
+```
 
+- **修改css**：DOM节点的style属性对应所有的CSS，可以直接获取或设置。因为CSS允许font-size这样的名称，但它并非JavaScript有效的属性名，所以需要在JavaScript中改写为驼峰式命名fontSize
+```javascript
+// 获取<p id="p-id">...</p>
+var p = document.getElementById('p-id');
+// 设置CSS:
+p.style.color = '#ff0000';
+p.style.fontSize = '20px';
+p.style.paddingTop = '2em';
+```
 
 ---
 
 ## 8-5 **插入DOM**
 
+- 使用appendChild，把一个子节点添加到父节点的最后一个子节点
+
+``` javascript
+<p id="js">JavaScript</p>
+<div id="list">
+    <p id="java">Java</p>
+    <p id="python">Python</p>
+    <p id="scheme">Scheme</p>
+</div>
+
+var
+    js = document.getElementById('js'),
+    list = document.getElementById('list');
+list.appendChild(js);
+
+
+var
+    list = document.getElementById('list'),
+    haskell = document.createElement('p');
+haskell.id = 'haskell';
+haskell.innerText = 'Haskell';
+list.appendChild(haskell);
+```
+
+- 使用parentElement.insertBefore(newElement, referenceElement);，子节点会插入到referenceElement之前
+
+``` javascript
+var
+    list = document.getElementById('list'),
+    ref = document.getElementById('python'),
+    haskell = document.createElement('p');
+haskell.id = 'haskell';
+haskell.innerText = 'Haskell';
+list.insertBefore(haskell, ref);
+```
+
+---
+
+## 8-6 **删除DOM**
+
+- 调用父节点的removeChild把自己删掉
+
+``` javascript
+// 拿到待删除节点:
+var self = document.getElementById('to-be-removed');
+// 拿到父节点:
+var parent = self.parentElement;
+// 删除:
+var removed = parent.removeChild(self);
+removed === self; // true
+```
+
+---
+
+## 8-7 **操作表单**
+
+- 浏览器默认点击\<button type="submit">时提交表单
+
+- 注意到id为md5-password的\<input>标记了name="password"，而用户输入的id为input-password的\<input>没有name属性。没有name属性的\<input>的数据不会被提交
+
+---
+
+## 8-8 **操作文件**
+
+- 在HTML表单中，可以上传文件的唯一控件就是\<input type="file">。
+
+- 注意：当一个表单包含\<input type="file">时，表单的enctype必须指定为multipart/form-data，method必须指定为post，浏览器才能正确编码并以multipart/form-data格式发送表单的数据。
+
+- HTML5的File API提供了File和FileReader两个主要对象，可以获得文件信息并读取文件
+
+``` javascript
+var
+    fileInput = document.getElementById('test-image-file'),
+    info = document.getElementById('test-file-info'),
+    preview = document.getElementById('test-image-preview');
+// 监听change事件:
+fileInput.addEventListener('change', function () {
+    // 清除背景图片:
+    preview.style.backgroundImage = '';
+    // 检查文件是否选择:
+    if (!fileInput.value) {
+        info.innerHTML = '没有选择文件';
+        return;
+    }
+    // 获取File引用:
+    var file = fileInput.files[0];
+    // 获取File信息:
+    info.innerHTML = '文件: ' + file.name + '<br>' +
+                     '大小: ' + file.size + '<br>' +
+                     '修改: ' + file.lastModifiedDate;
+    if (file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/gif') {
+        alert('不是有效的图片文件!');
+        return;
+    }
+    // 读取文件:
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        var
+            data = e.target.result; // 'data:image/jpeg;base64,/9j/4AAQSk...(base64编码)...'            
+        preview.style.backgroundImage = 'url(' + data + ')';
+    };
+    // 以DataURL的形式读取文件:
+    reader.readAsDataURL(file);
+});
+```
+
+- 上面的代码演示了如何通过HTML5的File API读取文件内容。以DataURL的形式读取到的文件是一个字符串，类似于data:image/jpeg;base64,/9j/4AAQSk...(base64编码)...，常用于设置图像。如果需要服务器端处理，把字符串base64,后面的字符发送给服务器并用Base64解码就可以得到原始文件的二进制内容。
