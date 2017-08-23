@@ -81,3 +81,71 @@
 
 ## 7-3 **原型继承**
 
+- JavaScript的原型继承实现方式就是：
+
+    - 定义新的构造函数，并在内部用call()调用希望“继承”的构造函数，并绑定this；
+
+    - 借助中间函数F实现原型链继承，最好通过封装的inherits函数完成；
+
+    - 继续在新的构造函数的原型上定义新方法
+
+    ``` javascript 
+    function inherits(Child, Parent) {
+    var F = function () {};
+    F.prototype = Parent.prototype;
+    Child.prototype = new F();
+    Child.prototype.constructor = Child;
+    }
+
+    function Student(props) {
+    this.name = props.name || 'Unnamed';
+    }
+
+    Student.prototype.hello = function () {
+    alert('Hello, ' + this.name + '!');
+    }
+
+    function PrimaryStudent(props) {
+    Student.call(this, props);
+    this.grade = props.grade || 1;
+    }
+
+    // 实现原型继承链:
+    inherits(PrimaryStudent, Student);
+
+    // 绑定其他方法到PrimaryStudent原型:
+    PrimaryStudent.prototype.getGrade = function () {
+    return this.grade;
+    };
+    ```
+
+---
+
+## 7-4 **class继承（ES6新增）**
+
+``` javascript 
+class Student {
+    constructor(name) {
+        this.name = name;
+    }
+
+    hello() {
+        alert('Hello, ' + this.name + '!');
+    }
+}
+
+
+class PrimaryStudent extends Student {
+    constructor(name, grade) {
+        super(name); // 记得用super调用父类的构造方法!
+        this.grade = grade;
+    }
+
+    myGrade() {
+        alert('I am at grade ' + this.grade);
+    }
+}
+```
+
+- 不是所有的主流浏览器都支持ES6的class。如果一定要现在就用上，就需要一个工具把class代码转换为传统的prototype代码，可以试试Babel这个工具。
+
