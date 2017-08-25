@@ -152,7 +152,7 @@ var name = "The Window";
 
 ## 5-7 **生成器（generator，ES6新增）**
 
-- generator由function*定义（注意多出的*号），并且，除了return语句，还可以用yield返回多次。
+- generator由function\*定义（注意多出的\*号），并且，除了return语句，还可以用yield返回多次。
 
 - 直接调用一个generator和调用函数不一样，fib(5)仅仅是创建了一个generator对象，还没有去执行它。
 
