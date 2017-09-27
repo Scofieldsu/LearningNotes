@@ -61,6 +61,10 @@ app.use(async (ctx, next) => {
 app.listen(3000);
 console.log('app started at port 3000...');
 ```
+- **ctx**:，参数ctx是由koa传入的封装了request和response的变量，我们可以通过它访问request和response，next是koa传入的将要处理的下一个异步函数。上面的异步函数中，我们首先用await next();处理下一个异步函数，然后，设置response的Content-Type和内容。由async标记的函数称为异步函数，在异步函数中，可以用await调用另一个异步函数，这两个关键字将在ES7中引入。
+
+    - ctx对象有一些简写的方法，例如ctx.url相当于ctx.request.url，ctx.type相当于ctx.response.type
+
 - **koa middleware**:原因是koa把很多async函数组成一个处理链，每个async函数都可以做一些自己的事情，然后用await next()来调用下一个async函数。我们把每个async函数称为middleware，这些middleware可以组合起来，完成很多有用的功能。
 
 ### 处理url （koa-router）
