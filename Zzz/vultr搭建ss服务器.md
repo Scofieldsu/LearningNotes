@@ -1,6 +1,9 @@
 
 ---
+
 # 在vultr上搭建代理服务器
+
+## Server
 
 1. 在vultr上创建账户，并购买一台服务器，5美元每月即可。可以使用alipay支付，最低充值10美元。（https://www.vultr.com/）
 ![buy_server](images/vultr/buy_server.png)
@@ -39,6 +42,10 @@ chmod +x shadowsocks.sh
 ![code4](images/vultr/code4.png)
 
 至此，服务端安装完毕!
+
+---
+
+## Clients
 
 不同平台有对应的客户端：https://shadowsocks.org/en/download/clients.html
 
