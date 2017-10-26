@@ -8,7 +8,7 @@
 1. 在vultr上创建账户，并购买一台服务器，5美元每月即可。可以使用alipay支付，最低充值10美元。（推荐centos7系统）（https://www.vultr.com/）
 ![buy_server](images/vultr/buy_server.png)
 
-2. 使用ssh客户端登录服务器，例如Xshell或者直接命令行  ssh username@ip 。复制你的服务器的ip和密码登录。
+2. 使用ssh客户端登录服务器，例如Xshell或者直接命令行  ssh root@ip 。复制你的服务器的ip和密码登录。
 ![server_info](images/vultr/server_info.png)
 
 3. 执行以下代码下载shadowsocks服务端安装脚本。
