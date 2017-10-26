@@ -44,6 +44,69 @@ chmod +x shadowsocks.sh
 至此，服务端安装完毕!
 
 ---
+# 服务器设置
+
+- 卸载方法：
+``` shell
+./shadowsocks.sh uninstall
+
+```
+
+- 单用户配置文件示例（文件路径： ／etc/shadowsocks.json）
+
+```
+{
+    "server":"0.0.0.0",
+    "server_port":your_server_port,
+    "local_address":"127.0.0.1",
+    "local_port":1080,
+    "password":"your_password",
+    "timeout":300,
+    "method":"your_encryption_method",
+    "fast_open": false
+}
+```
+
+- 多用户多端口配置文件示例
+
+```
+{
+    "server":"0.0.0.0",
+    "local_address":"127.0.0.1",
+    "local_port":1080,
+    "port_password":{
+         "8989":"password0",
+         "9001":"password1",
+         "9002":"password2",
+         "9003":"password3",
+         "9004":"password4"
+    },
+    "timeout":300,
+    "method":"your_encryption_method",
+    "fast_open": false
+}
+```
+> 配置多端口后，需要防火墙打开新增的端口。安装脚本中默认单端口。
+
+    centos7 防火墙命令
+         firewall-cmd --permanent --zone=public --add-port=8990/tcp
+         firewall-cmd --permanent --zone=public --add-port=8990/udp
+         firewall-cmd  --reload
+
+- 使用命令
+
+```
+启动：/etc/init.d/shadowsocks start
+
+停止：/etc/init.d/shadowsocks stop
+
+重启：/etc/init.d/shadowsocks restart
+
+状态：/etc/init.d/shadowsocks status
+
+```
+
+---
 
 ## Clients
 
