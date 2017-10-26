@@ -5,7 +5,7 @@
 
 ## Server
 
-1. 在vultr上创建账户，并购买一台服务器，5美元每月即可。可以使用alipay支付，最低充值10美元。（https://www.vultr.com/）
+1. 在vultr上创建账户，并购买一台服务器，5美元每月即可。可以使用alipay支付，最低充值10美元。（推荐centos7系统）（https://www.vultr.com/）
 ![buy_server](images/vultr/buy_server.png)
 
 2. 使用ssh客户端登录服务器，例如Xshell或者直接命令行  ssh username@ip 。复制你的服务器的ip和密码登录。
@@ -106,6 +106,32 @@ chmod +x shadowsocks.sh
 
 ```
 
+---
+# 安装锐速+bbr 加速
+
+1.更换centos内核
+
+```
+rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-3.10.0-229.1.2.el7.x86_64.rpm --force
+
+```
+
+2.安装锐速
+
+```
+wget -N --no-check-certificate https://raw.githubusercontent.com/91yun/serverspeeder/master/serverspeeder-all.sh && bash serverspeeder-all.sh
+```
+可能会提示内核版本问题，选择一个最接近的版本即可
+
+
+3.使用google bbr
+
+```
+wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh
+chmod +x bbr.sh
+./bbr.sh
+```
+> Google 开源了其 TCP BBR 拥塞控制算法，并提交到了 Linux 内核，从 4.9 开始，Linux 内核已经用上了该算法。
 ---
 
 ## Clients
