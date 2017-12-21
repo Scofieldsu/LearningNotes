@@ -25,10 +25,10 @@
 ``` java
 public class Test{
   public static void main(String args[]){
-    StringBuffer sBuffer = new StringBuffer("菜鸟教程官网：");
+    StringBuffer sBuffer = new StringBuffer("官网：");
     sBuffer.append("www");
-    sBuffer.append(".runoob");
-    sBuffer.append(".com");
+    sBuffer.append(".google");
+    sBuffer.append(".cn");
     System.out.println(sBuffer);  
   }
 }
@@ -42,4 +42,34 @@ public class Test{
 ---
 
 ## 数组
+
+- 声明数组：dataType[] arrayRefVar;   // 首选的方法
+
+- 创建数组：arrayRefVar = new dataType[arraySize];
+
+- 合在一起：dataType[] arrayRefVar = new dataType[arraySize];
+
+``` java
+//foreach 循环
+
+public class TestArray {
+   public static void main(String[] args) {
+      double[] myList = {1.9, 2.9, 3.4, 3.5};
+ 
+      // 打印所有数组元素
+      for (double element: myList) {
+         System.out.println(element);
+      }
+   }
+}
+```
+
+### 多维数组
+
+- type arrayName = new type[arraylenght1][arraylenght2];
+
+- 例：int a[][] = new int[2][3];
+
+### 数组常用方法
+![arrays](images/java-array.png)
 
