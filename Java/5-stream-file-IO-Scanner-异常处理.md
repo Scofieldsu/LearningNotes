@@ -166,21 +166,21 @@ if(scan.hasNext()){
 ## 异常
 
 
-!(异常类)[images/java-exceptions.png]
+![异常类](images/java-exceptions.png)
 
 - 所有的异常类是从 java.lang.Exception 类继承的子类。
 
 - java 非检查性异常
 
-!(非检查性异常)[images/java-exceptions1.png]
+![非检查性异常](images/java-exceptions1.png)
 
 - java  检查性异常
 
-!(检查性异常)[images/java-exceptions2.png]
+![检查性异常](images/java-exceptions2.png)
 
 - 异常方法
 
-!(异常方法)[images/java-exceptions3.png]
+![异常方法](images/java-exceptions3.png)
 
 
 ### 捕获异常
@@ -216,3 +216,14 @@ public class className
 }
 
 ```
+
+### 声明自定义异常
+
+``` shell
+1.所有异常都必须是 Throwable 的子类。
+2.如果希望写一个检查性异常类，则需要继承 Exception 类。
+3.如果你想写一个运行时异常类，那么需要继承 RuntimeException 类。
+
+```
+
+
