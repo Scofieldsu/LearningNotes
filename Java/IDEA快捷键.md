@@ -1,4 +1,4 @@
-## IDEA 快捷键
+## IDEA 快捷键 (windows)
 
 ---
 
