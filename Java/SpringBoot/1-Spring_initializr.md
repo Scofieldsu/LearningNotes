@@ -1,6 +1,6 @@
 ## Spring Initializr
 
-- 对于Spring boot可以使用IDEA professional进行创建spring boot项目。也可以在http://start.spring.io/  创建项目然后本地IDE打开。
+- 对于Spring boot可以使用IDEA professional进行创建spring boot项目。也可以在http://start.spring.io/  创建项目然后本地IDE打开（new project with existing source）。
 
 - 项目启动有多种方法：
 
