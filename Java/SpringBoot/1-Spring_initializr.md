@@ -5,11 +5,11 @@
 - 项目启动有多种方法：
 
     - 直接运行xxxxApplication文件
-	
+
 	- mvn  spring-boot：run
-	
+
 	- 运行mvn  install编译后，在target目录下 java -jar  xxx.jar
-	
+
 ### helloworld
 
 ``` java
@@ -24,49 +24,49 @@ public class HelloSpringBoot {
 }
 
 ```
-	
+
 ### 配置文件 application.properties
 
     - 换成application.yml更方便
-	
+
 	- 变量注解:   
 	   ``` java
 	   @value("${name}")
 	   private String name;
 	   ```
-	   
+
 	-类注解：
 	``` java
 	@Component
 	@ConfigurationProperties(prefix= "people")
 	public class People{
-	    
+
 		private String name;
-	
+
 	}
-	
+
 	// 使用
-	
+
 	@Autowired
 	private People  p1
-	
+
 	p1.getName()
 	```
-	
+
 	- 多环境配置
-	
+
 	    application-dev.yml和application-prod.yml
- 	     
+
 		在application.yml中配置：
-		
+
 		``` java
 		spring:
 		    profile:
 			    active: dev
 		```
-		
+
 		- 用jar包启动时可带参数  --spring.profiel.active=prod
-		
+
 ### Controller
 
 ![RestController](images/controller-1.png)
@@ -92,21 +92,24 @@ public class HelloSpringBoot {
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
-		
+
 2.配置
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:3306/dbname
-        username: 
-        password: 
+        username:
+        password:
     jpa:
         hibernate:
             ddl-auto: update
         show-sql: true
-		
-3. 类加上注解可 对应生成数据库表
+
+3. 类加上实体注解可 对应生成数据库表
 
 @Entity
+public class Xxxxx{
+
+}
 
 id属性加上注解
 @Id
@@ -117,4 +120,15 @@ id属性加上注解
 ### Restful API设计实现
 
 ![resyful-api](images/restfulapi.png)
-		
+
+- 接口继承JpaRepository
+    ``` java
+     public interface GirlRepository extends JpaRepository<Girl, Integer> {
+     }
+
+
+     //调用：
+     GirlRepository.findall()
+    ```
+
+- 事务注解  @Transactional
