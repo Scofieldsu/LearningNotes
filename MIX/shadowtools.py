@@ -11,7 +11,6 @@ import subprocess
 ## 服务动作
 def service_action(action):
     subprocess.call("/etc/init.d/shadowsocks %s" %(action), shell=True)
-    print "服务%s成功!!!" %action
 
 ## 删除配置中的端口
 def remove_port(port,config):
@@ -73,6 +72,16 @@ def get_md5_pwd(port):
     print "【密码:】" + m2.hexdigest()[8:14]
     return m2.hexdigest()[8:14]
 
+## 防火墙打开端口
+def open_firewall_port(port):
+    port_str = str(port)
+    print "防火墙开启%s tcp端口..."%(port_str)
+    subprocess.call("firewall-cmd --permanent --zone=public --add-port=%s/tcp" %(port_str), shell=True)
+    print "防火墙开启%s udp端口..."%(port_str)
+    subprocess.call("firewall-cmd --permanent --zone=public --add-port=%s/udp" %(port_str), shell=True)
+    print "重载防火墙配置..."
+    subprocess.call("firewall-cmd --reload", shell=True)
+
 ################################  Features  function
 
 ## 1. 新增端口账号
@@ -84,23 +93,11 @@ def add_port(port):
         print "==========端口已存在!!!============"
     else:
         ## 防火墙新增端口
-        tem1= subprocess.call("firewall-cmd --permanent --zone=public --add-port=%s/tcp" % (port_str), shell=True)
-        tem2 = subprocess.call("firewall-cmd --permanent --zone=public --add-port=%s/udp" % (port_str), shell=True)
-        tem3 = subprocess.call("firewall-cmd --reload", shell=True)
-        flag = True
-        for x in [tem1,tem2,tem3]:
-            if not flag :
-                pass
-            if x != 'success':
-                flag = False
-        if not flag:
-            print "防火墙添加端口失败！！！"
-        else:
-            print "防火墙添加端口成功..."
+        open_firewall_port(port_str)
 
-            ## 端口密码写入配置
-            add_port_pure(port_str)
-            print "写入配置成功..."
+        ## 端口密码写入配置
+        add_port_pure(port_str)
+        print "写入配置成功..."
 
         ## 重启服务
         service_action('restart')
@@ -129,6 +126,7 @@ point_string = '''
 7. 删除端口
 8. 修改密码
 9. 重新查看选项
+10. 端口添加防火墙规则
 '''
 def  main():
     fg = True
@@ -161,10 +159,13 @@ def  main():
             fg = False
         elif value == 9:
             print point_string
+        elif value == 10:
+            value_port = input("请输入端口：")
+            open_firewall_port(value_port)
         else:
             print "请重新选择正确的编号..."
 
 if __name__ == '__main__':
-    filename = 'shadowsocks.json'
+    filename = '/etc/shadowsocks.json'
     config = get_config()
     main()
