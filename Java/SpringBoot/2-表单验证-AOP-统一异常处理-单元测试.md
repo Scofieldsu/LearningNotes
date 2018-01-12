@@ -60,6 +60,41 @@ Hibernate Validator 附加的 constraint
 @Component
 public class HttpAspect {
 
+    private final static Logger logger = LoggerFactory.getLogger(HttpAspect.class);
+
+
+    @Pointcut("execution(public * com.imooc.controller.GirlController.*(..))")
+    public void log() {
+    }
+
+    @Before("log()")
+    public void doBefore(JoinPoint joinPoint) {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+
+        //url
+        logger.info("url={}", request.getRequestURL());
+
+        //method
+        logger.info("method={}", request.getMethod());
+
+        //ip
+        logger.info("ip={}", request.getRemoteAddr());
+
+        //类方法
+        logger.info("class_method={}", joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
+
+        //参数
+        logger.info("args={}", joinPoint.getArgs());
+    }
+
+    @After("log()")
+    public void doAfter() {
+    }
+
+    @AfterReturning(returning = "object", pointcut = "log()")
+    public void doAfterReturning(Object object) {
+        logger.info("response={}", object.toString());
     }
 ```
 
@@ -79,7 +114,32 @@ public class Result<T> {
 
     /** 具体的内容. */
     private T data;
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
 }
+
 ```
 
 - 对成功或者错误的返回进行方法包装
@@ -87,6 +147,24 @@ public class Result<T> {
 ``` java  
 public class ResultUtil {
 
+    public static Result success(Object object) {
+        Result result = new Result();
+        result.setCode(0);
+        result.setMsg("成功");
+        result.setData(object);
+        return result;
+    }
+
+    public static Result success() {
+        return success(null);
+    }
+
+    public static Result error(Integer code, String msg) {
+        Result result = new Result();
+        result.setCode(code);
+        result.setMsg(msg);
+        return result;
+    }
 }
 
 ```
@@ -95,11 +173,46 @@ public class ResultUtil {
 
 ``` java
 //handle
+@ControllerAdvice
+public class ExceptionHandle {
+
+    private final static Logger logger = LoggerFactory.getLogger(ExceptionHandle.class);
+
+    @ExceptionHandler(value = Exception.class)
+    @ResponseBody
+    public Result handle(Exception e) {
+        if (e instanceof GirlException) {
+            GirlException girlException = (GirlException) e;
+            return ResultUtil.error(girlException.getCode(), girlException.getMessage());
+        }else {
+            logger.error("【系统异常】{}", e);
+            return ResultUtil.error(-1, "未知错误");
+        }
+    }
+}
+
 ```
 
 - 自定义异常返回错误码
 
 ``` java
+public class GirlException extends RuntimeException{
+
+    private Integer code;
+
+    public GirlException(ResultEnum resultEnum) {
+        super(resultEnum.getMsg());
+        this.code = resultEnum.getCode();
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+}
 
 ```
 
@@ -107,6 +220,31 @@ public class ResultUtil {
 
 ``` java
 //enums
+public enum ResultEnum {
+    UNKONW_ERROR(-1, "未知错误"),
+    SUCCESS(0, "成功"),
+    PRIMARY_SCHOOL(100, "我猜你可能还在上小学"),
+    MIDDLE_SCHOOL(101, "你可能在上初中"),
+
+    ;
+
+    private Integer code;
+
+    private String msg;
+
+    ResultEnum(Integer code, String msg) {
+        this.code = code;
+        this.msg = msg;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+}
 ```
 
 ---
