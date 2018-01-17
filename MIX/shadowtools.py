@@ -153,7 +153,7 @@ def  main():
             remove_port(value_port,config)
         elif value == 8:
             value_port = input("请输入端口：")
-            value_pwd = input("请输入新密码：")
+            value_pwd = raw_input("请输入新密码：")
             change_pwd(value_port,value_pwd,config)
         elif value == 0:
             fg = False
