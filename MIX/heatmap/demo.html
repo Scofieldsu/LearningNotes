@@ -1,0 +1,138 @@
+<html>
+<head>
+	 <!-- <meta http-equiv="refresh" content="2"> -->
+  <style>
+ 	img{ width: 100%; height: auto;max-width: 100%; display: block; }
+</style>
+</head>
+<body>
+    <div>
+      <div id="heatmap"
+        style="width: 600px; height: 600px;float: left; border: 1px solid; border-color: grey;">
+
+        <img alt="" src="test.png">
+
+        </div>
+
+        <div style="float:left; margin-left:50px" >
+          <p>
+            <label>坐标个数</label>
+            <input style="width: 50px" id="num"/>
+          </p>
+          <p>
+            <label>x最大值:</label>
+            <input type="text" id="x_max" style="width: 50px" value="600"/>
+          </p>
+          <p>
+            <label>y最大值:</label>
+            <input type="text" id="y_max" style="width: 50px" value="600"/>
+          </p>
+
+          <p>
+            <label>颜色梯度(0~1):</label>
+            <input type="text" id="depth" style="width: 50px" value="1" />
+          </p>
+          <p>
+            <label>圆点半径:</label>
+            <input type="text" id="radius" style="width: 50px" value="30" />
+          </p>
+
+          <button onclick="random_coordinate()">随机生成</button>
+          <button onclick="show()">显示坐标</button>
+          <button onclick="reload()">重置</button>
+          <br />
+          <textarea id="results" style="margin-top:20px" rows="20" cols="50"></textarea>
+        </div>
+
+        <div id="xy"
+          style="width: 400; height: 400px;float: right; border: 1px solid; border-color: grey;">
+
+          <img alt="" src="xy.png">
+
+          <div style="width: 400px;margin-top: 80px">
+            <p>热力图demo说明：  </p>
+            <p>
+              1. 输入需要的坐标个数，随机生成坐标，可在文本框中修改数值后再在图中显示，注意保持json格式。
+            </p>
+            <p>
+              2. 默认是在图中继续添加热力点的方式，如需重新显示，重置会清除之前的热力点。
+            </p>
+            <p>
+              3. x,y最大值根据左侧图片所占控件大小决定，无需更改，如自己修改文本坐标时注意不超过最大值即可。
+            </p>
+            <p>
+              4. 当坐标个数超过800时，显示出现问题。（只显示一个深色点，其他点颜色很浅）
+            </p>
+          </div>
+
+          </div>
+    </div>
+</body>
+
+<script src="heatmap.js">
+
+
+
+</script>
+
+
+<script type="text/javascript">
+
+    //刷新
+     function reload(){
+       location.reload()
+     }
+
+     //坐标对象
+     function Point(x,y,value,radius){
+       this.x = x;
+       this.y = y;
+       this.value = value
+       this.radius = radius
+     }
+
+     // 显示坐标
+     function show(){
+       var heatmapInstance = h337.create({
+        container : document.querySelector('#heatmap'),
+        // backgroundColor: 'rgba(0,0,0,.95)',
+        // custom gradient colors 这里设置了颜色梯度。键值从0到1
+        gradient: {
+          // enter n keys between 0 and 1 here
+          // for gradient color customization
+         0.25: "rgb(0,0,255)",
+         0.55: "rgb(0,255,0)",
+         0.85: "yellow",
+         1.0: "rgb(255,0,0)"
+        },
+        // the maximum opacity (the value with the highest intensity will have it) 最高透明度
+        maxOpacity: 1,
+        // minimum opacity. any value > 0 will produce
+        // no transparent gradient transition
+        minOpacity: 0
+      });
+      var show_points = JSON.parse(document.getElementById('results').value)
+      heatmapInstance.addData(show_points)
+     }
+     //随机生成坐标
+     function random_coordinate(){
+         var x_max = document.getElementById('x_max').value
+         var y_max = document.getElementById('y_max').value
+         var depth = parseFloat(document.getElementById('depth').value)
+         var radius = parseFloat(document.getElementById('radius').value)
+         var num =  document.getElementById('num').value || 0
+         var heatmapInstance = h337.create({
+     			container : document.querySelector('#heatmap')
+     		});
+         var points=new Array();
+         for (let i = 0; i < num; i++) {
+           points[i] = new Point(Math.floor(Math.random()*x_max),Math.floor(Math.random()*y_max),depth,radius)
+           console.log(points[i])
+         }
+         document.getElementById('results').value = JSON.stringify(points,null, 4)
+         // heatmapInstance.addData(points)
+     }
+
+</script>
+
+</html>
